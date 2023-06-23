@@ -82,12 +82,12 @@ h1 {
    color: rgb(255, 255, 255);
 }
 
-#signin button[type="submit"] {
+button {
    display: block;
    position: absolute;
    width: 52px;
    height: 52px;
-   color: rgb(52, 56, 61);
+   color: rgb(0, 0, 0);
    border-radius: 50px;
    outline: 0;
    z-index: 2;

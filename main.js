@@ -1,7 +1,7 @@
 const form = document.getElementById('signin');
 const usernameInput = document.getElementById('user');
 const passwordInput = document.getElementById('pass');
-const submitButton = document.getElementById('submitBtn');
+const submitButton = document.getElementById('submit');
 
 
 form.addEventListener('submit', function (event) {
@@ -10,10 +10,12 @@ form.addEventListener('submit', function (event) {
    const username = usernameInput.value;
    const password = passwordInput.value;
 
+
    if (username === '' || password === '') {
-      alert('Please enter both username and password');
+
       document.getElementById("error").innerHTML = "Please enter both username and password.";
-   } else {
+   }
+    else {
       window.location.href = 'products.html';
    }
 
@@ -21,3 +23,11 @@ form.addEventListener('submit', function (event) {
    window.localStorage.setItem('password', password);
 
 });
+
+
+const storedUsername = window.localStorage.getItem('username');
+const storedPassword = window.localStorage.getItem('password');
+
+if (storedUsername && storedPassword) {
+   console.log(storedUsername, storedPassword);
+}
