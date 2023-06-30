@@ -9,13 +9,93 @@
 </head>
 
 <body>
-   <h1>Products</h1>
    <div id="search-container">
       <input type="text" id="search-input" placeholder="Search for products...">
       <button id="search-button">Search</button>
    </div>
-   <div id="product-container" </div> </body> <script src="products.js">
-      </script>
-      <script src="search.js"></script>
+   <div id="productListContainer">
+      <h1>Products Management</h1>
+      <div class="SubmitClear">
+         <input type="text" id="product-description-field">
+         <input type="number" id="product-price-field">
+         <input type="number" id="product-discount-field">
+         <input type="number" id="product-rating-field">
+         <input type="number" id="product-stock-field">
+         <input type="text" id="product-brand-field">
+         <input type="text" id="product-category-field">
+         <input type="text" id="product-thumbnail-field">
+         <button id="submit-button">Submit</button>
+         <button id="clear-button">Clear</button>
+      </div>
+      <ul id="productList"></ul>
+   </div>
+
+   <div id="product-container"></div>
+
+   <div class="add-form-container">
+      <h2>Add Product</h2>
+      <form id="add-product-form">
+         <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" required>
+         </div>
+
+         <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" required></textarea>
+         </div>
+
+         <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" step="0.01" min="0" required>
+         </div>
+
+         <div class="form-group">
+            <label for="discount">Discount (%):</label>
+            <input type="number" id="discount" step="1" min="0" max="100" required>
+         </div>
+
+         <div class="form-group">
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" step="0.1" min="0" max="5" required>
+         </div>
+
+         <div class="form-group">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" min="0" required>
+         </div>
+
+         <div class="form-group">
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" required>
+         </div>
+
+         <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" required>
+               <option value="">Select a category</option>
+               <option value="Electronics">Electronics</option>
+               <option value="Clothing">Clothing</option>
+               <option value="Home">Home</option>
+               <!-- Add more options as needed -->
+            </select>
+         </div>
+
+         <div class="form-group">
+            <label for="images">Image URLs (comma-separated):</label>
+            <input type="text" id="images" required>
+         </div>
+
+         <div class="form-group">
+            <button type="submit">Add Product</button>
+            <button type="button" id="clear-form">Clear Form</button>
+         </div>
+      </form>
+   </div>
+
+   <script src="products.js"></script>
+   <script src="search.js"></script>
+   <script src="addproduct.js"></script>
+</body>
 
 </html>

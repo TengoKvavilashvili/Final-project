@@ -14,8 +14,7 @@ form.addEventListener('submit', function (event) {
    if (username === '' || password === '') {
 
       document.getElementById("error").innerHTML = "Please enter both username and password.";
-   }
-    else {
+   } else {
       window.location.href = 'products.html';
    }
 

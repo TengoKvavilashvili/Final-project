@@ -1,24 +1,48 @@
-// Fetch product data from the API
 fetch('https://dummyjson.com/products')
    .then((res) => res.json())
    .then(renderProducts)
    .catch((error) => console.error('Error while fetching product data:', error));
 
-// Function to render product data on the web page
+
+function fetchProductThumbnails(products, index) {
+   if (index < products.length) {
+      const product = products[index];
+      const thumbnailUrl = product.thumbnail;
+
+      fetch(thumbnailUrl)
+         .then((response) => {
+            if (response.ok) {
+
+               setTimeout(() => {
+                  fetchProductThumbnails(products, index + 1);
+               }, 1000);
+            } else {
+               console.error('Failed to fetch thumbnail:', thumbnailUrl);
+
+               fetchProductThumbnails(products, index + 1);
+            }
+         })
+         .catch((error) => {
+            console.error('Error while fetching thumbnail:', thumbnailUrl);
+
+            fetchProductThumbnails(products, index + 1);
+         });
+   }
+}
+
 function renderProducts(response) {
    const productContainer = document.getElementById('product-container');
    if (productContainer) {
-      // Clear the container
       productContainer.innerHTML = '';
 
       if (response && Array.isArray(response.products)) {
          const products = response.products;
 
-         // Sort products by price in ascending order
+
          products.sort((a, b) => a.price - b.price);
 
-         // Create and append HTML elements for each product
-         products.forEach((product) => {
+
+         products.forEach((product, index) => {
             const productElement = document.createElement('div');
             productElement.className = 'product';
 
@@ -62,6 +86,23 @@ function renderProducts(response) {
             categoryElement.className = 'product-category';
             categoryElement.textContent = 'Category: ' + product.category;
 
+            const editButton = document.createElement('button');
+            editButton.className = 'product-edit-button';
+            editButton.textContent = 'Edit';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'product-delete-button';
+            deleteButton.textContent = 'Delete';
+
+
+            editButton.addEventListener('click', () => {
+               handleEditProduct(product, index, products);
+            });
+
+            deleteButton.addEventListener('click', () => {
+               handleDeleteProduct(index, products);
+            });
+
             detailsElement.appendChild(titleElement);
             detailsElement.appendChild(descriptionElement);
             detailsElement.appendChild(priceElement);
@@ -70,6 +111,8 @@ function renderProducts(response) {
             detailsElement.appendChild(stockElement);
             detailsElement.appendChild(brandElement);
             detailsElement.appendChild(categoryElement);
+            detailsElement.appendChild(editButton);
+            detailsElement.appendChild(deleteButton);
 
             productElement.appendChild(imageElement);
             productElement.appendChild(detailsElement);
@@ -77,7 +120,6 @@ function renderProducts(response) {
             productContainer.appendChild(productElement);
          });
 
-         // Fetch thumbnails with a delay between requests
          fetchProductThumbnails(products, 0);
       } else {
          console.error('The fetched data does not contain a valid products array:', response);
@@ -85,33 +127,85 @@ function renderProducts(response) {
    }
 }
 
-// Function to fetch product thumbnails with a delay between requests
-function fetchProductThumbnails(products, index) {
-   if (index < products.length) {
-      const product = products[index];
-      const thumbnailUrl = product.thumbnail;
+function handleDeleteProduct(index, products) {
 
-      // Fetch the thumbnail
-      fetch(thumbnailUrl)
-         .then((response) => {
-            if (response.ok) {
-               // Process the thumbnail response here
-               // ...
+   products.splice(index, 1);
 
-               // Continue fetching the next thumbnail with a delay of 1 second (1000 milliseconds)
-               setTimeout(() => {
-                  fetchProductThumbnails(products, index + 1);
-               }, 1000);
-            } else {
-               console.error('Failed to fetch thumbnail:', thumbnailUrl);
-               // Continue fetching the next thumbnail immediately without delay
-               fetchProductThumbnails(products, index + 1);
-            }
-         })
-         .catch((error) => {
-            console.error('Error while fetching thumbnail:', thumbnailUrl);
-            // Continue fetching the next thumbnail immediately without delay
-            fetchProductThumbnails(products, index + 1);
-         });
-   }
+
+   renderProducts({
+      products
+   });
+}
+
+function handleEditProduct(product, index, products) {
+
+   const descriptionField = document.getElementById('product-description-field');
+   const priceField = document.getElementById('product-price-field');
+   const discountField = document.getElementById('product-discount-field');
+   const ratingField = document.getElementById('product-rating-field');
+   const stockField = document.getElementById('product-stock-field');
+   const brandField = document.getElementById('product-brand-field');
+   const categoryField = document.getElementById('product-category-field');
+   const thumbnailField = document.getElementById('product-thumbnail-field');
+
+
+   descriptionField.value = product.description;
+   priceField.value = product.price;
+   discountField.value = product.discountPercentage;
+   ratingField.value = product.rating;
+   stockField.value = product.stock;
+   brandField.value = product.brand;
+   categoryField.value = product.category;
+   thumbnailField.value = product.thumbnail;
+
+
+   const submitButton = document.getElementById('submit-button');
+   submitButton.addEventListener('click', () => {
+
+      const newDescription = descriptionField.value;
+      const newPrice = parseFloat(priceField.value);
+      const newDiscount = parseFloat(discountField.value);
+      const newRating = parseFloat(ratingField.value);
+      const newStock = parseInt(stockField.value);
+      const newBrand = brandField.value;
+      const newCategory = categoryField.value;
+      const newThumbnail = thumbnailField.value;
+
+      product.description = newDescription;
+      product.price = newPrice;
+      product.discountPercentage = newDiscount;
+      product.rating = newRating;
+      product.stock = newStock;
+      product.brand = newBrand;
+      product.category = newCategory;
+      product.thumbnail = newThumbnail;
+
+
+      renderProducts({
+         products
+      });
+
+
+      descriptionField.value = '';
+      priceField.value = '';
+      discountField.value = '';
+      ratingField.value = '';
+      stockField.value = '';
+      brandField.value = '';
+      categoryField.value = '';
+      thumbnailField.value = '';
+   });
+
+   const clearButton = document.getElementById('clear-button');
+   clearButton.addEventListener('click', () => {
+
+      descriptionField.value = '';
+      priceField.value = '';
+      discountField.value = '';
+      ratingField.value = '';
+      stockField.value = '';
+      brandField.value = '';
+      categoryField.value = '';
+      thumbnailField.value = '';
+   });
 }
